@@ -1,3 +1,5 @@
 slyme.log
 __pycache__
 vfiles
+.ipynb_checkpoints/
+.python-version
