@@ -22,6 +22,25 @@ driver = uc.Chrome(
 input("Press Enter to continue...")
 ```
 
+```python
+from selenium import webdriver
+
+options = webdriver.ChromeOptions()
+# options.add_argument(f"--user-data-dir=~/.config/google-chrome/selenium-standalone-chrome")
+options.add_argument('--ignore-ssl-errors=yes')
+options.add_argument('--ignore-certificate-errors')
+
+driver = webdriver.Remote(
+    command_executor='http://localhost:4444/wd/hub',
+    options=options
+)
+
+driver.get("https://www.nowsecure.nl")
+input("Press Enter to continue...")
+
+driver.quit()
+```
+
 
 ```bash
 clear
