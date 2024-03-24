@@ -9,13 +9,16 @@ USER kasm-user
 RUN curl https://pyenv.run | bash
 ENV PYENV_ROOT="$HOME/.pyenv"
 ENV PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
-WORKDIR /home/kasm_user/flygpt
+WORKDIR /home/kasm-user/flygpt
 RUN pyenv install 3.10
 RUN pyenv virtualenv 3.10 flygpt
 RUN pyenv local flygpt
 COPY requirements.txt .
 RUN pip install -r requirements.txt 
-COPY src/* ./src/
+COPY src src
 RUN python src/install_chromedriver.py
-WORKDIR /home/kasm_user/.config/
-COPY /home/duhan/source/flygpt/requirements.txt .
+WORKDIR /home/kasm-user/
+COPY config/google-chrome .config/google-chrome
+USER root
+RUN chown kasm-user:kasm-user -R .config
+RUN chmod -R a+rwx .config/
