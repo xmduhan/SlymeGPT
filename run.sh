@@ -1,1 +1,1 @@
-python -m uvicorn flygpt.api:app
+python -m uvicorn flygpt.api:app --host 0.0.0.0
