@@ -39,7 +39,7 @@ class FlyGPTServer:
     def __init__(self,
         driver_version=None, proxy_server=None,
         browser_executable_path='/opt/google/chrome/google-chrome',
-        user_data_dir="~/.config/google-chrome/flygpt"
+        user_data_dir="~/.config/google-chrome/flygpt",
         wait_user_comfirm=False,
     ):
         # Install driver is no exists
