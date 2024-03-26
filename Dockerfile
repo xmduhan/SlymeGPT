@@ -23,8 +23,7 @@ ENV PYENV_ROOT="$HOME/.pyenv"
 ENV PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
 
 # Clone source
-RUN echo '1'
-RUN echo '2'
+RUN echo '3'
 RUN git clone https://github.com/xmduhan/flygpt.git /home/kasm-user/source/flygpt
 
 # Create run environment
