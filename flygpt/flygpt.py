@@ -10,8 +10,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 import re
 import subprocess
 import requests
-from markdownify import markdownify as md
-
 
 
 class FlyGPTClient(object):
@@ -27,7 +25,7 @@ class FlyGPTClient(object):
             'accept': 'application/json'
         }
         with requests.get(self.url, params=params, headers=headers, stream=True) as response:
-            for chunk in response.iter_content(1024):
+            for chunk in response.iter_content(2**32):
                 yield chunk.decode('utf-8')
 
 class FlyGPTServer:
@@ -83,7 +81,6 @@ class FlyGPTServer:
 
 
     def recv(self, interval=.1):
-
         count = .0
         self.last_text = ""
         while True:
@@ -93,13 +90,14 @@ class FlyGPTServer:
                 continue
             if elements:
                 # text = elements[-1].text
-                text = md(elements[-1].get_attribute('innerHTML')).strip()
+                text = elements[-1].get_attribute('innerHTML')
                 if self.last_text == text:
                     count += interval
                     if count > 5:
+                        yield f'\n{text}'
                         break
                 else:
-                    yield text[len(self.last_text):]
+                    yield '.'
                     self.last_text = text
                     count = .0
 
