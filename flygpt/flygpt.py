@@ -65,34 +65,41 @@ class FlyGPTServer:
 
         if wait_user_comfirm:
             input('Press any key to continue ...')
+
         prompt_input = self.driver.find_element(By.CLASS_NAME, 'm-0.w-full.resize-none')
-        sleep(10)
+
+        self.elements = []
+
 
     def send(self, prompt_text):
+        self.elements = self.driver.find_elements(By.CLASS_NAME, 'markdown')
         prompt_input = self.driver.find_element(By.CLASS_NAME, 'm-0.w-full.resize-none')
         self.driver.execute_script("arguments[0].value = arguments[1]", prompt_input, prompt_text)
-        sleep(3)
+        sleep(1)
         prompt_input.send_keys(Keys.ENTER)
         prompt_input.send_keys(Keys.ENTER)
-        sleep(3)
 
-    def recv(self):
+
+    def recv(self, interval=.1):
+
+        count = .0
         self.last_text = ""
         while True:
-            sleep(3)
+            sleep(interval)
             elements = self.driver.find_elements(By.CLASS_NAME, 'markdown')
+            if len(self.elements) == len(elements):
+                continue
             if elements:
                 text = elements[-1].text
                 if self.last_text == text:
-                    break
+                    count += interval 
+                    if count > 5:
+                        break
                 else:
                     yield text[len(self.last_text):]
                     self.last_text = text
+                    count = .0
 
-    def recv1(self):
-        for i in range(10):
-            yield b"some fake video bytes"
-            sleep(1)
 
     def clear_session(self):
         while True:
