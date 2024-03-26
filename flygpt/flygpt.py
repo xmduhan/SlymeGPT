@@ -40,6 +40,7 @@ class FlyGPTServer:
         driver_version=None, proxy_server=None,
         browser_executable_path='/opt/google/chrome/google-chrome',
         user_data_dir="~/.config/google-chrome/flygpt"
+        wait_user_comfirm=False,
     ):
         # Install driver is no exists
         self.browser_executable_path = browser_executable_path
@@ -52,6 +53,7 @@ class FlyGPTServer:
         options.add_argument(f"--user-data-dir={user_data_dir}")
         if proxy_server:
             options.add_argument(f'--proxy-server={ proxy_server }')
+
         self.driver = uc.Chrome(
             driver_executable_path=self.driver_executable_path,
             browser_executable_path=self.browser_executable_path,
@@ -60,6 +62,9 @@ class FlyGPTServer:
         )
         self.driver.implicitly_wait(10)
         self.driver.get('https://chat.openai.com/')
+
+        if wait_user_comfirm:
+            input('Press any key to continue ...')
         prompt_input = self.driver.find_element(By.CLASS_NAME, 'm-0.w-full.resize-none')
         sleep(10)
 

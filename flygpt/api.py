@@ -7,9 +7,9 @@ from time import sleep
 
 app = FastAPI()
 
-def get_flygpt():
+def get_flygpt(wait_user_comfirm=False):
     # return FlyGPTServer(proxy_server='http://127.0.0.1:1081')
-    return FlyGPTServer()
+    return FlyGPTServer(wait_user_comfirm=wait_user_comfirm)
 
 @app.get("/flggpt/generate")
 async def generate(prompt_text: str, retries: int=5):
@@ -20,6 +20,6 @@ async def generate(prompt_text: str, retries: int=5):
         except:
             generate.flygpt.driver.quit()
             generate.flygpt = get_flygpt()
-generate.flygpt = get_flygpt()
+generate.flygpt = get_flygpt(True)
 
 
