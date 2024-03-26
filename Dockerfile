@@ -7,6 +7,7 @@ RUN apt update -y
 RUN apt install -y build-essential zlib1g-dev libssl-dev libncurses5-dev \
 libreadline-dev libsqlite3-dev libbz2-dev libffi-dev liblzma-dev libgdbm-dev tk-dev
 RUN apt install -y --only-upgrade google-chrome-stable
+RUN apt install -y openssh-client openssh-server
 
 # Copy Chrome config
 USER root
