@@ -10,6 +10,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import re
 import subprocess
 import requests
+from markdownify import markdownify as md
 
 
 
@@ -65,6 +66,7 @@ class FlyGPTServer:
 
         if wait_user_comfirm:
             input('Press any key to continue ...')
+        print('wait_user_comfirm:', wait_user_comfirm)
 
         prompt_input = self.driver.find_element(By.CLASS_NAME, 'm-0.w-full.resize-none')
 
@@ -90,9 +92,10 @@ class FlyGPTServer:
             if len(self.elements) == len(elements):
                 continue
             if elements:
-                text = elements[-1].text
+                # text = elements[-1].text
+                text = md(elements[-1].get_attribute('innerHTML')).strip()
                 if self.last_text == text:
-                    count += interval 
+                    count += interval
                     if count > 5:
                         break
                 else:
