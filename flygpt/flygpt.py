@@ -86,10 +86,9 @@ class FlyGPTServer:
         if not elements:
             return False
     
-        return len(elements[0].children()) != 4
+        return len(elements[-1].children()) != 4
 
     def recv(self, interval=.1):
-        regenerate_button_xpath = "//div[contains(text(), 'M4.5 2.5C5.05228 2.5 5.5 2.94772 5.5')]"
         count = 0
         while True:
             # If generating, then break
