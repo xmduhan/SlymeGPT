@@ -79,14 +79,21 @@ class FlyGPTServer:
         prompt_input.send_keys(Keys.ENTER)
         prompt_input.send_keys(Keys.ENTER)
 
+    def generating(self):
+        elements = self.driver.find_elements(
+            By.CSS_SELECTOR, ".text-gray-400.flex.self-end.items-center.justify-center")
+        
+        if not elements:
+            return False
+    
+        return len(elements[0].children()) != 4
 
     def recv(self, interval=.1):
         regenerate_button_xpath = "//div[contains(text(), 'M4.5 2.5C5.05228 2.5 5.5 2.94772 5.5')]"
         count = 0
         while True:
             # If generating, then break
-            generating = not driver.find_elements(By.XPATH, regenerate_button_xpath)
-            if generating:
+            if self.generating():
                 break
             # Or generating is begin too fast
             sleep(interval)
@@ -104,8 +111,7 @@ class FlyGPTServer:
                 # text = elements[-1].text
                 text = elements[-1].get_attribute('innerHTML')
                 if self.last_text == text:
-                    generating = not driver.find_elements(By.XPATH, regenerate_button_xpath)
-                    if not generating:
+                    if not self.generating():
                         yield f'\n{text}'
                         break
                 else:
