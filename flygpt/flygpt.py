@@ -85,7 +85,7 @@ class FlyGPTServer:
         count = 0
         while True:
             # If generating, then break
-            generating = not driver.find_elements(By.XPATH, regenerate_button_xpath)
+            generating = not self.driver.find_elements(By.XPATH, regenerate_button_xpath)
             if generating:
                 break
             # Or generating is begin too fast
@@ -104,7 +104,7 @@ class FlyGPTServer:
                 # text = elements[-1].text
                 text = elements[-1].get_attribute('innerHTML')
                 if self.last_text == text:
-                    generating = not driver.find_elements(By.XPATH, regenerate_button_xpath)
+                    generating = not self.driver.find_elements(By.XPATH, regenerate_button_xpath)
                     if not generating:
                         yield f'\n{text}'
                         break
