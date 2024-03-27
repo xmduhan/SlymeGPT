@@ -81,7 +81,19 @@ class FlyGPTServer:
 
 
     def recv(self, interval=.1):
-        count = .0
+        regenerate_button_xpath = "//div[contains(text(), 'M4.5 2.5C5.05228 2.5 5.5 2.94772 5.5')]"
+        count = 0
+        while True:
+            # If generating, then break
+            generating = not driver.find_elements(By.XPATH, regenerate_button_xpath)
+            if generating:
+                break
+            # Or generating is begin too fast
+            sleep(interval)
+            count += 1
+            if count > 30:
+                break
+
         self.last_text = ""
         while True:
             sleep(interval)
@@ -92,15 +104,13 @@ class FlyGPTServer:
                 # text = elements[-1].text
                 text = elements[-1].get_attribute('innerHTML')
                 if self.last_text == text:
-                    count += interval
-                    if count > 5:
+                    generating = not driver.find_elements(By.XPATH, regenerate_button_xpath)
+                    if not generating:
                         yield f'\n{text}'
                         break
                 else:
                     yield '.'
                     self.last_text = text
-                    count = .0
-
 
     def clear_session(self):
         while True:
