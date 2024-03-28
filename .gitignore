@@ -6,3 +6,4 @@ vfiles
 ~/
 config/*
 .config/
+*.swp
