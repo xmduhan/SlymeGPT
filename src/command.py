@@ -2,7 +2,6 @@ import re
 import sys
 import subprocess  # Added subprocess module for executing shell commands
 from pathlib import Path
-from glob import glob
 from textwrap import dedent
 from flygpt.flygpt import FlyGPTClient
 from bs4 import BeautifulSoup
@@ -19,11 +18,7 @@ def get_output_files(text):
 def build_prompt(text):
     human_input = ''
     for (cmd, args) in line_parser.findall(text):
-        if cmd == 'l':
-            human_input += f'```ls {args}:\n'
-            human_input += '\n'.join(glob(args)) + '\n'
-            human_input += '```\n\n'
-        elif 'r' in cmd:
+        if 'r' in cmd:
             human_input += f'```{args}\n'
             human_input += Path(args).read_text()
             human_input += '```\n\n'
