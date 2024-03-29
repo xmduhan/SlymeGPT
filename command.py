@@ -69,6 +69,7 @@ def main():
         print(filename, end=' ... ')
         found = soup.find_all("code", {"class": f"language-{filename}"})
         if found:
+            code_text = found[0].text
             Path(filename).write_text(code_text)
             print('(OK)')
         else:
