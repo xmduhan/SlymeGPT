@@ -67,9 +67,12 @@ def main():
     output_files = get_output_files(text)
     for filename in output_files:
         print(filename, end=' ... ')
-        code_text = soup.find_all("code", {"class": f"language-{filename}"})[0].text
-        Path(filename).write_text(code_text)
-        print('(OK)')
+        found = soup.find_all("code", {"class": f"language-{filename}"})
+        if found:
+            Path(filename).write_text(code_text)
+            print('(OK)')
+        else:
+            print('(MISS)'
 
 if __name__ == '__main__':
     main()
