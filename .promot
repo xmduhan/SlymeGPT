@@ -15,3 +15,8 @@ p: 新的目录结构请放在tree.txt文件中
 rw: src/command.py
 p: 修改程序逻辑，如果cmd为sh则执行shell命令并把stdout结果增加到用户的输出信息
 ```
+
+```python -u src/command.py
+rw: src/command.py
+p: 修改程序逻辑，去掉cmd为l的命令功能
+```
