@@ -5,6 +5,7 @@ from pathlib import Path
 from textwrap import dedent
 from flygpt.flygpt import FlyGPTClient
 from bs4 import BeautifulSoup
+from termcolor import colored  # Added termcolor for colored output
 
 line_pattern = re.compile(r'(\S+)\s*:\s*(\S*.*\S+)')
 
@@ -59,7 +60,7 @@ def main():
     # 调用GPT
     content = []
     client = FlyGPTClient()
-    print('AI正在思考中: ', end='') 
+    print('AI正在思考中: ', end='')
     for chunk in client.generate(prompt_text):
         content.append(chunk)
         if chunk == '.':
@@ -76,9 +77,9 @@ def main():
         if found:
             code_text = found[0].text
             Path(filename).write_text(code_text)
-            print('(OK)')
+            print(colored('(OK)', 'green'))  # Colored output for 'OK'
         else:
-            print('(MISS)')
+            print(colored('(MISS)', 'red'))  # Colored output for 'MISS'
 
 if __name__ == '__main__':
     main()
