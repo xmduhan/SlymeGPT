@@ -1,5 +1,6 @@
 import re
 import sys
+import subprocess  # Added subprocess module for executing shell commands
 from pathlib import Path
 from glob import glob
 from textwrap import dedent
@@ -41,6 +42,13 @@ def build_prompt(text):
 
         ''') + human_input
     return prompt_text
+
+def execute_shell_command(command):
+    try:
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        return result.stdout
+    except Exception as e:
+        return str(e)
 
 def main():
     if len(sys.argv) != 2:
