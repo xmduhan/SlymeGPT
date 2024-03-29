@@ -72,7 +72,7 @@ def main():
             Path(filename).write_text(code_text)
             print('(OK)')
         else:
-            print('(MISS)'
+            print('(MISS)')
 
 if __name__ == '__main__':
     main()
