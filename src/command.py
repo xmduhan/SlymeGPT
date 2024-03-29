@@ -18,11 +18,7 @@ def get_output_files(text):
 def build_prompt(text):
     human_input = ''
     for (cmd, args) in line_parser.findall(text):
-        if 'r' in cmd:
-            human_input += f'```{args}\n'
-            human_input += Path(args).read_text()
-            human_input += '```\n\n'
-        elif cmd == 'p':
+        if cmd == 'p':
             human_input += args + '\n'
         elif cmd == 'sh':  # Added condition to execute shell command
             human_input += f'```\n'
