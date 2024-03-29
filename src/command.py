@@ -23,12 +23,16 @@ def build_prompt(text):
             human_input += f'```ls {args}:\n'
             human_input += '\n'.join(glob(args)) + '\n'
             human_input += '```\n\n'
-        if 'r' in cmd:
+        elif 'r' in cmd:
             human_input += f'```{args}\n'
             human_input += Path(args).read_text()
             human_input += '```\n\n'
-        if cmd == 'p':
+        elif cmd == 'p':
             human_input += args + '\n'
+        elif cmd == 'sh':  # Added condition to execute shell command
+            human_input += f'```\n'
+            human_input += execute_shell_command(args)
+            human_input += '```\n\n'
 
     prompt_text = dedent(f'''\
         系统: 你是一个程序员,请协助用户要求编写或修改代码.
