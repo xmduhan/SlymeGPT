@@ -17,13 +17,15 @@ def extract_output_files(text):
 
 def build_prompt(text):
     human_input = ''
-    for (cmd, args) in line_pattern.findall(text):
-        if cmd == 'p':
-            human_input += args + '\n'
-        elif cmd == 'sh':
-            human_input += f'```\n'
-            human_input += execute_shell_command(args)
-            human_input += '```\n\n'
+    for line in text.split('\n'):
+        if line.startswith(('sh:', 'w:')):
+            cmd, args = line.split(':', 1)
+            if cmd == 'sh':
+                human_input += f'```\n'
+                human_input += execute_shell_command(args.strip())
+                human_input += '```\n\n'
+        else:
+            human_input += line + '\n'
 
     prompt_text = dedent(f'''\
         系统: 你是一个程序员,请协助用户要求编写或修改代码.
@@ -41,4 +43,42 @@ def build_prompt(text):
 def execute_shell_command(command):
     try:
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
-        return result.std
+        return result.stdout
+    except Exception as e:
+        return str(e)
+
+def main():
+    if len(sys.argv) != 2:
+        print('Usage: flygpt prompt_file')
+        return
+
+    # 生成 prompt
+    text = Path(sys.argv[1]).read_text()
+    prompt_text = build_prompt(text)
+
+    # 调用GPT
+    content = []
+    client = FlyGPTClient()
+    print('AI正在思考中: ', end='') 
+    for chunk in client.generate(prompt_text):
+        content.append(chunk)
+        if chunk == '.':
+            print(chunk, end='')
+    response = content[-1]
+    print('')
+
+    # 读取返回结果并写回文件
+    soup = BeautifulSoup(response, features="html.parser")
+    output_files = extract_output_files(text)
+    for filename in output_files:
+        print(filename, end=' ... ')
+        found = soup.find_all("code", {"class": f"language-{filename}"})
+        if found:
+            code_text = found[0].text
+            Path(filename).write_text(code_text)
+            print('(OK)')
+        else:
+            print('(MISS)')
+
+if __name__ == '__main__':
+    main()

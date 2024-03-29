@@ -26,3 +26,9 @@ sh: cat src/command.py
 w: src/command.py
 p: 适当调整程序结构使更符合python的变成规范, 可以修改函数名称和变量名称
 ```
+
+```python -u src/command.py
+sh: cat src/command.py
+w: src/command.py
+p: 修改程序逻辑，如果text中的每一行是一条命令(如:'sh:...'或 'w:...')则按命令原有定义处理，如果不是命令则默认为用户输入信息, 不再需要命令p
+```
