@@ -54,7 +54,7 @@ def main():
     # 调用GPT
     content = []
     client = FlyGPTClient()
-    print('AI正在思考中:', end='') 
+    print('AI正在思考中: ', end='') 
     for chunk in client.generate(prompt_text):
         content.append(chunk)
         if chunk == '.':
