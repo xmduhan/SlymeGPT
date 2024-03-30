@@ -17,6 +17,6 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-# start_api_server = "src/scripts/start_api_server"
-# start_container = "src/scripts/start_container"
+start_api_server = "flygpt.scripts.start_api_server:main"
+start_container = "flygpt.scripts.start_container:main"
 flygpt = "flygpt.scripts.flygpt:main"

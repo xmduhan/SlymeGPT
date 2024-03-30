@@ -82,5 +82,8 @@ def main():
         else:
             print(colored('(MISS)', 'red'))
 
+    # 执行 vi +'G difftool -y' 命令
+    subprocess.run("vi +'G difftool -y'", shell=True)
+
 if __name__ == '__main__':
     main()
