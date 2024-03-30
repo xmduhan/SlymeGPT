@@ -7,3 +7,4 @@ vfiles
 config/*
 .config/
 *.swp
+.prompt

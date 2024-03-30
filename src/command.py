@@ -77,9 +77,9 @@ def main():
         if found:
             code_text = found[0].text
             Path(filename).write_text(code_text)
-            print(colored('(OK)', 'green'))  # Colored output for 'OK'
+            print(colored('(OK)', 'green'))
         else:
-            print(colored('(MISS)', 'red'))  # Colored output for 'MISS'
+            print(colored('(MISS)', 'red'))
 
 if __name__ == '__main__':
     main()
