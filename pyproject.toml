@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "project-name"
+name = "flygpt"
 version = "0.1.0"
 description = "A Python package for FlyGPT."
-authors = ["Du Han <duhan@189.cn"]
+authors = ["Du Han <duhan@189.cn>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -16,5 +16,7 @@ termcolor = "^1.1.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.flygpt]
-commands = ["command.py"]
+[tool.poetry.scripts]
+# start_api_server = "src/scripts/start_api_server"
+# start_container = "src/scripts/start_container"
+flygpt = "flygpt.scripts.flygpt:main"
