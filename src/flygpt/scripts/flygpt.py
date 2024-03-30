@@ -50,8 +50,8 @@ def execute_shell_command(command):
         return str(e)
 
 def check_unpushed_commits():
-    result = subprocess.run("git log origin/master..HEAD", shell=True, capture_output=True, text=True)
-    return bool(result.stdout)
+    result = subprocess.run("git status --porcelain", shell=True, capture_output=True, text=True)
+    return 'M' in result.stdout or 'A' in result.stdout or 'D' in result.stdout or 'R' in result.stdout
 
 def push_changes():
     subprocess.run("git push origin HEAD", shell=True)
@@ -68,13 +68,13 @@ def main():
     # 调用GPT
     content = []
     client = FlyGPTClient()
-    print('AI正在思考中: ', end='', flush=True)  # Disable print buffer
+    print('🤖 AI正在思考中: ', end='', flush=True)  # Disable print buffer
     for chunk in client.generate(prompt_text):
         content.append(chunk)
         if chunk == '.':
             print(chunk, end='', flush=True)  # Disable print buffer
     response = content[-1]
-    print('', flush=True)  # Disable print buffer
+    print('💡', flush=True)  # AI思考结束后打印一个emoji灯泡图标
 
     # 读取返回结果并写回文件
     soup = BeautifulSoup(response, features="html.parser")
@@ -89,8 +89,11 @@ def main():
         else:
             print(colored('(MISS)', 'red'), flush=True)  # Disable print buffer
 
-    # 执行 vi +'G difftool -y' 命令
-    subprocess.run("vi +'G difftool -y'", shell=True)
+    # 执行 vi +'G difftool -y' 命令前检查是否有未暂存的更改
+    if check_unpushed_commits():
+        subprocess.run("vi +'G difftool -y'", shell=True)
+    else:
+        print('没有未暂存的更改，无需执行difftool。')
 
     # 检查工作区是否有未推送的提交
     if check_unpushed_commits():
