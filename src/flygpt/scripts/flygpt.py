@@ -49,6 +49,13 @@ def execute_shell_command(command):
     except Exception as e:
         return str(e)
 
+def check_unpushed_commits():
+    result = subprocess.run("git log origin/master..HEAD", shell=True, capture_output=True, text=True)
+    return bool(result.stdout)
+
+def push_changes():
+    subprocess.run("git push origin HEAD", shell=True)
+
 def main():
     if len(sys.argv) != 2:
         print('Usage: flygpt prompt_file')
@@ -84,6 +91,13 @@ def main():
 
     # 执行 vi +'G difftool -y' 命令
     subprocess.run("vi +'G difftool -y'", shell=True)
+
+    # 检查工作区是否有未推送的提交
+    if check_unpushed_commits():
+        # 提示用户是否需要推送
+        push = input("是否需要推送本地提交至远程仓库？(y/n): ")
+        if push.lower() == 'y':
+            push_changes()
 
 if __name__ == '__main__':
     main()
