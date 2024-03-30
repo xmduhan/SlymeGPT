@@ -61,26 +61,26 @@ def main():
     # 调用GPT
     content = []
     client = FlyGPTClient()
-    print('AI正在思考中: ', end='')
+    print('🤖 AI正在思考中: ', end='', flush=True)  # Disable print buffer
     for chunk in client.generate(prompt_text):
         content.append(chunk)
         if chunk == '.':
-            print(chunk, end='')
+            print(chunk, end='', flush=True)  # Disable print buffer
     response = content[-1]
-    print('')
+    print('', flush=True)  # Disable print buffer
 
     # 读取返回结果并写回文件
     soup = BeautifulSoup(response, features="html.parser")
     output_files = extract_output_files(text)
     for filename in output_files:
-        print(filename, end=' ... ')
+        print(filename, end=' ... ', flush=True)  # Disable print buffer
         found = soup.find_all("code", {"class": f"language-{filename}"})
         if found:
             code_text = found[0].text
             Path(filename).write_text(code_text)
-            print(colored('(OK)', 'green'))
+            print(colored('(OK)', 'green'), flush=True)  # Disable print buffer
         else:
-            print(colored('(MISS)', 'red'))
+            print(colored('(MISS)', 'red'), flush=True)  # Disable print buffer
 
     # 执行 vi +'G difftool -y' 命令
     subprocess.run("vi +'G difftool -y'", shell=True)
