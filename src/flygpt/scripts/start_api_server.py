@@ -1,5 +1,5 @@
 import uvicorn
-from flygpt.api import app
+from flygpt.api import app, get_flygpt, generate
 import sys
 
 def main():
@@ -21,6 +21,10 @@ def main():
     # Set app configurations
     app.wait_user_confirm = wait_user_confirm
     app.proxy_server = proxy_server
+    generate.flygpt = get_flygpt(
+        wait_user_confirm=app.wait_user_confirm,
+        proxy_server=app.proxy_server
+    )
 
     uvicorn.run(app, host="0.0.0.0")
 
