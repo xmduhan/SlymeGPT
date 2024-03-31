@@ -12,9 +12,12 @@ line_pattern = re.compile(r'(\S+)\s*:\s*(\S*.*\S+)')
 
 def extract_output_files(text):
     output_files = []
-    for (cmd, args) in line_pattern.findall(text):
-        if 'w' in cmd:
-            output_files.append(args)
+    for line in text.split('\n'):
+        # Split the line into command and arguments
+        cmd, _, args = line.partition(':')
+        cmd = cmd.strip()  # Remove leading and trailing whitespace
+        if cmd in ('w', 'rw', 'wr'):
+            output_files.append(args.strip())
     return output_files
 
 def build_prompt(text):
