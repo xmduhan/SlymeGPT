@@ -26,13 +26,12 @@ def build_prompt(text):
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('default.j2')
-    human_input, output_files = generate_human_input(text)
-    prompt_text = template.render(human_input=human_input, output_files=output_files)
+    output_files = extract_output_files(text)
+    prompt_text = template.render(human_input=generate_human_input(text), output_files=output_files)
     return prompt_text
 
 def generate_human_input(text):
     human_input = ''
-    output_files = extract_output_files(text)
     for line in text.split('\n'):
         if line.startswith(('sh:', 'w:', 'r:', 'rw:', 'wr:')):
             cmd, args = line.split(':', 1)
@@ -50,7 +49,7 @@ def generate_human_input(text):
                 human_input += line.split('#', 1)[0] + '\n'
         else:
             human_input += line + '\n'
-    return human_input, output_files
+    return human_input
 
 def execute_shell_command(command):
     try:
