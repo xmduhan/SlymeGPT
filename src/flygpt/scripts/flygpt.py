@@ -15,7 +15,7 @@ def extract_output_files(text):
     for line in text.split('\n'):
         # Split the line into command and arguments
         cmd, _, args = line.partition(':')
-        cmd = cmd.strip()  # Remove leading and trailing whitespace
+        cmd = cmd.rstrip()  # Remove leading and trailing whitespace
         if cmd in ('w', 'rw', 'wr'):
             output_files.append(args.strip())
     return output_files
