@@ -12,7 +12,7 @@ RUN apt install -y --only-upgrade google-chrome-stable
 # Copy Chrome config
 COPY .config /home/kasm-user/
 RUN chown kasm-user:kasm-user -R /home/kasm-user
-RUN chmod -R a+rwx ~/.config
+RUN chmod -R a+rwx /home/kasm-user/.config
 
 USER kasm-user 
 ENV USER="kasm-user"

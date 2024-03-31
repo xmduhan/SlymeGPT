@@ -20,3 +20,6 @@ build-backend = "poetry.core.masonry.api"
 start_api_server = "flygpt.scripts.start_api_server:main"
 start_container = "flygpt.scripts.start_container:main"
 flygpt = "flygpt.scripts.flygpt:main"
+
+[tool.poetry.extras]
+templates = ["flygpt.templates.default.j2"]
