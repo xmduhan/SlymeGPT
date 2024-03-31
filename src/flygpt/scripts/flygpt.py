@@ -20,12 +20,18 @@ def extract_output_files(text):
 def build_prompt(text):
     human_input = ''
     for line in text.split('\n'):
-        if line.startswith(('sh:', 'w:')):
+        if line.startswith(('sh:', 'w:', 'r:')):
             cmd, args = line.split(':', 1)
             if cmd == 'sh':
                 human_input += f'```\n'
                 human_input += execute_shell_command(args.strip())
                 human_input += '```\n\n'
+            elif 'r' in  cmd:
+                with open(args.strip(), 'r') as f:
+                    human_input += f.read() + '\n'
+            elif '#' in cmd:
+                # Handle single-line comment
+                human_input += line.split('#', 1)[0] + '\n'
         else:
             human_input += line + '\n'
 
