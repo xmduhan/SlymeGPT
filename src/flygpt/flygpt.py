@@ -39,7 +39,7 @@ class FlyGPTServer:
         driver_version=None,
         browser_executable_path='/opt/google/chrome/google-chrome',
         user_data_dir="~/.config/google-chrome/flygpt",
-        wait_user_comfirm=False,
+        wait_user_confirm=False,
         proxy_server=None,
     ):
         # Install driver is no exists
@@ -63,9 +63,9 @@ class FlyGPTServer:
         self.driver.implicitly_wait(10)
         self.driver.get('https://chat.openai.com/')
 
-        if wait_user_comfirm:
+        if wait_user_confirm:
             input('Press any key to continue ...')
-        print('wait_user_comfirm:', wait_user_comfirm)
+        print('wait_user_confirm:', wait_user_confirm)
 
         prompt_input = self.driver.find_element(By.CLASS_NAME, 'm-0.w-full.resize-none')
 
@@ -143,8 +143,8 @@ class FlyGPTServer:
             delete_menu.click()
             sleep(3)
 
-            # Comfirm
-            comfirm_button = self.driver.find_element(
+            # Confirm
+            confirm_button = self.driver.find_element(
                 By.CSS_SELECTOR, 'button.relative.btn-danger')
-            comfirm_button.click()
+            confirm_button.click()
             sleep(3)
