@@ -1,4 +1,3 @@
-#!python
 import re
 import sys
 import subprocess
@@ -21,7 +20,19 @@ def extract_output_files(text):
     return output_files
 
 def build_prompt(text):
+    from jinja2 import Environment, FileSystemLoader, select_autoescape
+    env = Environment(
+        loader=FileSystemLoader('src/flygpt/templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('default.j2')
+    human_input, output_files = generate_human_input(text)
+    prompt_text = template.render(human_input=human_input, output_files=output_files)
+    return prompt_text
+
+def generate_human_input(text):
     human_input = ''
+    output_files = extract_output_files(text)
     for line in text.split('\n'):
         if line.startswith(('sh:', 'w:', 'r:', 'rw:', 'wr:')):
             cmd, args = line.split(':', 1)
@@ -39,19 +50,7 @@ def build_prompt(text):
                 human_input += line.split('#', 1)[0] + '\n'
         else:
             human_input += line + '\n'
-
-    prompt_text = dedent(f'''\
-        系统: 你是一个程序员,请协助用户要求编写或修改代码.
-        系统: 你的输出代码全文并无需提供其他信息.
-        系统: 本次需要你提供的文件包括: { ','.join(extract_output_files(text)) }
-        系统: 代码输出格式如下:
-        ```文件路径
-        代码内容
-        ```
-        以下信息由用户提供:
-
-        ''') + human_input
-    return prompt_text
+    return human_input, output_files
 
 def execute_shell_command(command):
     try:
