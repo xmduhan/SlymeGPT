@@ -1,6 +1,6 @@
 from typing import Union
 from fastapi import FastAPI
-from .flygpt import FlyGPTServer
+from .server import FlyGPTServer
 from fastapi.responses import StreamingResponse
 from time import sleep
 

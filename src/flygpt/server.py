@@ -53,7 +53,7 @@ class FlyGPTServer:
 
         self.elements = []
 
-    def send_recv(self, prompt_text):
+    def send_recv(self, prompt_text, interval=.1):
         self.elements = self.driver.find_elements(By.CLASS_NAME, 'markdown')
         prompt_input = self.driver.find_element(By.CLASS_NAME, 'm-0.w-full.resize-none')
         self.driver.execute_script("arguments[0].value = arguments[1]", prompt_input, prompt_text)
