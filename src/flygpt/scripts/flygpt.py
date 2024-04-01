@@ -6,6 +6,7 @@ from textwrap import dedent
 from flygpt.flygpt import FlyGPTClient
 from bs4 import BeautifulSoup
 from termcolor import colored  # Added termcolor for colored output
+from datetime import datetime
 
 line_pattern = re.compile(r'(\S+)\s*:\s*(\S*.*\S+)')
 
@@ -117,5 +118,16 @@ def main():
         if push.lower() == 'y':
             push_changes()
 
+    # 保存发送的prompt_text和收到的response到'.prompt/.history'文件中
+    prompt_history = f'''
+    [{datetime.now()}] send: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    {prompt_text}
+    [{datetime.now()}] recv: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    {response}
+    '''
+    with open('.prompt/.history', 'a') as history_file:
+        history_file.write(dedent(prompt_history))
+
 if __name__ == '__main__':
     main()
+
