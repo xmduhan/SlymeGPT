@@ -33,18 +33,23 @@ def build_prompt(text):
 def generate_human_input(text):
     human_input = ''
     for line in text.split('\n'):
+
+        if '#' in line:
+            line = line.split('#', 1)[0] + '\n'
+            if len(line.strip()) == 0:
+                continue
+
         if line.startswith(('sh:', 'w:', 'r:', 'rw:', 'wr:')):
             cmd, args = line.split(':', 1)
             if cmd == 'sh':
-                human_input += f'```\n'
+                human_input += f'```{args.strip()}\n'
                 human_input += execute_shell_command(args.strip())
                 human_input += '```\n\n'
             elif 'r' in  cmd:
+                human_input += f'```{args.strip()}\n'
                 with open(args.strip(), 'r') as f:
                     human_input += f.read() + '\n'
-            elif '#' in cmd:
-                # Handle single-line comment
-                human_input += line.split('#', 1)[0] + '\n'
+                human_input += f'```\n\n'
         else:
             human_input += line + '\n'
     return human_input
@@ -71,6 +76,8 @@ def main():
     # 生成 prompt
     text = Path(sys.argv[1]).read_text()
     prompt_text = build_prompt(text)
+    # print(prompt_text)
+    # return
 
     # 调用GPT
     content = []
@@ -81,6 +88,7 @@ def main():
         if chunk == '.':
             print(chunk, end='', flush=True)  # Disable print buffer
     response = content[-1]
+    # print(response)
     print('💡', flush=True)  # AI思考结束后打印一个emoji灯泡图标
 
     # 读取返回结果并写回文件

@@ -71,8 +71,7 @@ class FlyGPTServer:
 
         self.elements = []
 
-
-    def send(self, prompt_text):
+    def send_recv(self, prompt_text):
         self.elements = self.driver.find_elements(By.CLASS_NAME, 'markdown')
         prompt_input = self.driver.find_element(By.CLASS_NAME, 'm-0.w-full.resize-none')
         self.driver.execute_script("arguments[0].value = arguments[1]", prompt_input, prompt_text)
@@ -80,16 +79,6 @@ class FlyGPTServer:
         prompt_input.send_keys(Keys.ENTER)
         prompt_input.send_keys(Keys.ENTER)
 
-    def generating(self):
-        elements = self.driver.find_elements(
-            By.CSS_SELECTOR, ".text-gray-400.flex.self-end.items-center.justify-center")
-        
-        if not elements:
-            return False
-    
-        return len(elements[-1].children()) != 4
-
-    def recv(self, interval=.1):
         count = 0
         while True:
             # If generating, then break
@@ -148,3 +137,13 @@ class FlyGPTServer:
                 By.CSS_SELECTOR, 'button.relative.btn-danger')
             confirm_button.click()
             sleep(3)
+
+    def generating(self):
+        elements = self.driver.find_elements(
+            By.CSS_SELECTOR, ".text-gray-400.flex.self-end.items-center.justify-center")
+
+        if not elements:
+            return False
+
+        return len(elements[-1].children()) != 4
+

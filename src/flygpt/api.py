@@ -20,9 +20,9 @@ async def generate(prompt_text: str, retries: int=5):
                 proxy_server=app.proxy_server
             )
         try:
-            generate.flygpt.send(prompt_text)
-            return StreamingResponse(generate.flygpt.recv())
+            return StreamingResponse(generate.flygpt.send_recv(prompt_text))
         except:
             generate.flygpt.driver.quit()
             generate.flygpt = None
 generate.flygpt = None
+
