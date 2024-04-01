@@ -24,12 +24,12 @@ class FlyGPTServer:
         wait_user_confirm=False,
         proxy_server=None,
     ):
-        # Install driver is no exists
+        # Install driver if not exists
         self.browser_executable_path = browser_executable_path
         driver_version = driver_version if driver_version else self.get_chrome_version()
         self.driver_executable_path = ChromeDriverManager(driver_version=driver_version).install()
 
-        # Initial chrome driver
+        # Initialize chrome driver
         options = webdriver.ChromeOptions()
         # options.add_argument("--headless=new")
         options.add_argument(f"--user-data-dir={user_data_dir}")
@@ -64,9 +64,9 @@ class FlyGPTServer:
         count = 0
         while True:
             # If generating, then break
-            if self.generating():
+            if self.generating() or self.check_continue_generating():
                 break
-            # Or generating is begin too fast
+            # Or generating is beginning too fast
             sleep(interval)
             count += 1
             if count > 30:
@@ -74,7 +74,14 @@ class FlyGPTServer:
 
         self.last_text = ""
         while True:
+            if self.check_continue_generating():
+                continue_generating_divs = self.driver.find_elements(By.XPATH, "//div[contains(text(), 'Continue generating')]")
+                if continue_generating_divs:
+                    continue_generating_divs[0].click()
+                    continue
+
             sleep(interval)
+
             elements = self.driver.find_elements(By.CLASS_NAME, 'markdown')
             if len(self.elements) == len(elements):
                 continue
@@ -82,7 +89,7 @@ class FlyGPTServer:
                 # text = elements[-1].text
                 text = elements[-1].get_attribute('innerHTML')
                 if self.last_text == text:
-                    if not self.generating():
+                    if not self.generating() and not self.check_continue_generating():
                         yield f'\n{text}'
                         break
                 else:
@@ -128,3 +135,7 @@ class FlyGPTServer:
             return False
 
         return len(elements[-1].children()) != 4
+
+    def check_continue_generating(self):
+        continue_generating_divs = self.driver.find_elements(By.XPATH, "//div[contains(text(), 'Continue generating')]")
+        return len(continue_generating_divs) > 0
