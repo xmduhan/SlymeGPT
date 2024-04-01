@@ -3,7 +3,7 @@ import sys
 import subprocess
 from pathlib import Path
 from textwrap import dedent
-from flygpt.flygpt import FlyGPTClient
+from flygpt.client import FlyGPTClient
 from bs4 import BeautifulSoup
 from termcolor import colored  # Added termcolor for colored output
 from datetime import datetime
