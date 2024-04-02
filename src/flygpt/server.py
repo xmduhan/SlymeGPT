@@ -89,7 +89,8 @@ class FlyGPTServer:
                 # text = elements[-1].text
                 text = elements[-1].get_attribute('innerHTML')
                 if self.last_text == text:
-                    if not self.generating() and not self.check_continue_generating():
+                    # if not self.generating() and not self.check_continue_generating():
+                    if not self.generating():
                         yield f'\n{text}'
                         break
                 else:

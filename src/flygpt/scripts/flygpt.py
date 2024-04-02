@@ -72,14 +72,17 @@ def push_changes():
 def process_response(response, text):
     soup = BeautifulSoup(response, features="html.parser")
     output_files = extract_output_files(text)
+    print(len(output_files))
     for filename in output_files:
         print(filename, end=' ... ', flush=True)  # Disable print buffer
         found = soup.find_all("code", {"class": f"language-{filename}"})
         if found:
+            print('------1------')
             code_text = found[0].text
             Path(filename).write_text(code_text)
             print(colored('(OK)', 'green'), flush=True)  # Disable print buffer
         else:
+            print('------2------')
             print(colored('(MISS)', 'red'), flush=True)  # Disable print buffer
             raise FileNotFoundError(f"File {filename} not found in the response.")
 
